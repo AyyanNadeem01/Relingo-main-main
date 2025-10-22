@@ -6,6 +6,33 @@ import { useTranslation } from 'react-i18next';
 import { getLessonById, getQuizzesForLesson } from '../../db/queries';
 import { getReligionColor } from '../../utils/colors';
 
+const fallbackLessonTranslations: Record<string, { title: string; description: string }> = {
+  'buddhisme-opprinnelse': {
+    title: 'lessons.buddhism.origins.title',
+    description: 'lessons.buddhism.origins.description',
+  },
+  'buddhisme-tro': {
+    title: 'lessons.buddhism.beliefs.title',
+    description: 'lessons.buddhism.beliefs.description',
+  },
+  'buddhisme-praksis': {
+    title: 'lessons.buddhism.practices.title',
+    description: 'lessons.buddhism.practices.description',
+  },
+  'buddhisme-hoytider': {
+    title: 'lessons.buddhism.holidays.title',
+    description: 'lessons.buddhism.holidays.description',
+  },
+  'buddhisme-tekster': {
+    title: 'lessons.buddhism.texts.title',
+    description: 'lessons.buddhism.texts.description',
+  },
+  'buddhisme-moderne': {
+    title: 'lessons.buddhism.modern.title',
+    description: 'lessons.buddhism.modern.description',
+  },
+};
+
 export default function LessonScreen() {
   const { lessonId } = useParams<{ lessonId: string }>();
   const navigate = useNavigate();
@@ -52,6 +79,12 @@ export default function LessonScreen() {
   const color = lesson.religion ? getReligionColor(lesson.religion.slug) : '#2ED573';
   const stars = lesson.user_progress?.stars || 0;
   const bestScore = lesson.user_progress?.best_score || 0;
+  const fallbackKeys = fallbackLessonTranslations[lesson.slug];
+  const titleKey = lesson.title_key || fallbackKeys?.title;
+  const descriptionKey = lesson.description_key || fallbackKeys?.description;
+  const localizedTitle = titleKey ? t(titleKey) : lesson.title;
+  const localizedDescription = descriptionKey ? t(descriptionKey) : lesson.description;
+  const titleInitial = (localizedTitle || lesson.title).charAt(0);
 
   const handleStartQuiz = () => {
     if (quizzes.length > 0) {
@@ -84,7 +117,7 @@ export default function LessonScreen() {
           {lesson.thumbnail_url ? (
             <img
               src={lesson.thumbnail_url}
-              alt={lesson.title}
+              alt={localizedTitle}
               className="h-full w-full object-cover"
             />
           ) : (
@@ -92,7 +125,7 @@ export default function LessonScreen() {
               className="w-24 h-24 rounded-full flex items-center justify-center text-white text-4xl font-bold"
               style={{ backgroundColor: color }}
             >
-              {lesson.title.charAt(0)}
+              {titleInitial}
             </div>
           )}
 
@@ -132,13 +165,13 @@ export default function LessonScreen() {
 
           {/* Title */}
           <h1 className="font-display text-3xl font-bold text-gray-900 mb-3">
-            {lesson.title_key ? t(lesson.title_key) : lesson.title}
+            {localizedTitle}
           </h1>
 
           {/* Description */}
-          {(lesson.description_key || lesson.description) && (
+          {(descriptionKey || lesson.description) && (
             <p className="text-gray-600 mb-6 text-lg">
-              {lesson.description_key ? t(lesson.description_key) : lesson.description}
+              {localizedDescription}
             </p>
           )}
 
