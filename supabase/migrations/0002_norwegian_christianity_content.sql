@@ -131,7 +131,7 @@ WHERE l.slug = 'kristendom-tro'
 LIMIT 1;
 
 INSERT INTO public.questions (quiz_id, type, prompt, order_index, meta)
-SELECT q.id, 'tf', 'I kristen lære forstås Jesus som både fullt ut Gud og menneske.', 3,
+SELECT q.id, 'gap', 'I kristen lære forstås Jesus som både fullt ut Gud og menneske.', 3,
 '{"answer": true}'::jsonb
 FROM public.quizzes q
 JOIN public.lessons l ON l.id = q.lesson_id

@@ -146,7 +146,7 @@ UPDATE public.questions SET
   prompt_tr = 'Hıristiyan doktrinine göre İsa hem tamamen ___ hem de Tanrı olarak anlaşılır.',
   meta_en = '{"answer":"human"}'::jsonb,
   meta_tr = '{"answer":"insan"}'::jsonb
-WHERE prompt = 'I kristen lære forstås Jesus som både fullt ut ___ og menneske.'
+WHERE prompt = 'I kristen lære forstås Jesus som både fullt ut Gud og menneske.'
   AND type = 'gap';
 
 -- kristendom-tro - Question 5
